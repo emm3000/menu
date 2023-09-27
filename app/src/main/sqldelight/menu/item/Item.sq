@@ -1,0 +1,25 @@
+CREATE TABLE Item (
+    itemId INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+);
+
+insertItem:
+INSERT OR REPLACE
+INTO Item
+VALUES(?, ?, ?, ?, ?);
+
+getAllItems:
+SELECT *
+FROM Item;
+
+getItemsByMenu:
+SELECT Item.*
+FROM Menu
+INNER JOIN MenuItem ON Menu.menuId = MenuItem.menuId
+INNER JOIN Item ON MenuItem.itemId = Item.itemId
+WHERE Menu.menuId = ?;
+
+

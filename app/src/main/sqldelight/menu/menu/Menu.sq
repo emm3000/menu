@@ -1,0 +1,16 @@
+CREATE TABLE Menu (
+    menuId INTEGER NOT NULL PRIMARY KEY,
+    date INTEGER NOT NULL,
+    description TEXT NOT NULL,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+);
+
+insertMenu:
+INSERT OR REPLACE
+INTO Menu
+VALUES(?, ?, ?, ?, ?);
+
+getAllMenus:
+SELECT *
+FROM Menu;

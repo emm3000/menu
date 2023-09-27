@@ -1,0 +1,18 @@
+CREATE TABLE MenuItem (
+    menuId INTEGER NOT NULL,
+    itemId INTEGER NOT NULL,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL,
+    PRIMARY KEY (menuId, itemId),
+    CONSTRAINT fk_item FOREIGN KEY (itemId) REFERENCES Item(itemId) ON DELETE CASCADE,
+    CONSTRAINT fk_menu FOREIGN KEY (menuId) REFERENCES Menu(menuId) ON DELETE CASCADE
+);
+
+insertMenuItem:
+INSERT OR REPLACE
+INTO MenuItem
+VALUES(?, ?, ?, ?);
+
+getAllMenuItems:
+SELECT *
+FROM MenuItem;
