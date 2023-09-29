@@ -10,7 +10,7 @@ import menu.persondb.PersonEntity
 import menu.persondb.SelectJustName
 
 class PersonDataSourceImpl(
-    db: EmmDatabase
+    private val db: EmmDatabase
 ): PersonDataSource {
 
     private val queries = db.personQueries

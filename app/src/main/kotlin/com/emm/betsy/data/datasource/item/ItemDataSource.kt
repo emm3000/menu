@@ -13,7 +13,7 @@ import menu.item.Item
 import menu.menu.Menu
 
 class ItemDataSource(
-    db: EmmDatabase
+    private val db: EmmDatabase
 ) {
 
     private val itemQueries = db.itemQueries

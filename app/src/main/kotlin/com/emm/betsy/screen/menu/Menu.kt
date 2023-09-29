@@ -1,62 +1,59 @@
-package com.emm.betsy.screen.home
+package com.emm.betsy.screen.menu
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.emm.betsy.NavigationRoutes
 import com.emm.betsy.ui.theme.BetsyTheme
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(
+fun Menu(
     navigationController: NavController,
-    vm: HomeViewModel = koinViewModel()
 ) {
-    Home(
-        navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) },
-        navigateToAddMenu = { navigationController.navigate(NavigationRoutes.AddMenu.route) },
-        navigateToCurrentMenu = { navigationController.navigate(NavigationRoutes.Menu.route) }
+    Menu(
+        popBackStack = { navigationController.popBackStack() }
     )
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-private fun Home(
-    navigateToCurrentMenu: () -> Unit = {},
-    navigateToAddItem: () -> Unit = {},
-    navigateToAddMenu: () -> Unit = {}
+private fun Menu(
+    startedDish: List<String> = emptyList(),
+    backgroundDish: List<String> = emptyList(),
+    popBackStack: () -> Unit = {}
 ) {
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(text = "RosaAPP") },
+                title = { Text(text = "Rosa Menu") },
+                navigationIcon = {
+                    IconButton(
+                        onClick = popBackStack
+                    ) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                    }
+                }
             )
         }
     ) {
@@ -67,29 +64,34 @@ private fun Home(
                 .padding(30.dp),
         ) {
 
-            FilledTonalButton(
-                onClick = navigateToCurrentMenu,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Current Menu")
+            Spacer(modifier = Modifier.height(22.dp))
+
+            Text(text = "Entradas", style = MaterialTheme.typography.titleMedium)
+
+            if (startedDish.isEmpty()) {
+                Text(
+                    text = "*** No selecciono el menu del día ***",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            } else {
+                startedDish.forEach {
+                    Text(text = "- $it")
+                }
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(22.dp))
 
-            FilledTonalButton(
-                onClick = navigateToAddItem,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Add Item")
-            }
+            Text(text = "Segundos", style = MaterialTheme.typography.titleMedium)
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            FilledTonalButton(
-                onClick = navigateToAddMenu,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Add Menu")
+            if (backgroundDish.isEmpty()) {
+                Text(
+                    text = "*** No selecciono el menu del día ***",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            } else {
+                backgroundDish.forEach {
+                    Text(text = "- $it")
+                }
             }
 
         }
@@ -101,10 +103,10 @@ private fun Home(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun HomePreview() {
+fun MenuPreview() {
     BetsyTheme(darkTheme = true) {
         Surface {
-            Home()
+            Menu()
         }
     }
 }

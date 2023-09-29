@@ -63,7 +63,7 @@ class HomeViewModel(
         )
 
     init {
-        play()
+//        play()
     }
 
     private fun play() = viewModelScope.launch {

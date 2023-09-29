@@ -6,11 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.emm.betsy.screen.home.Home
+import com.emm.betsy.screen.menu.AddItem
+import com.emm.betsy.screen.menu.AddMenu
+import com.emm.betsy.screen.menu.Menu
 import com.emm.betsy.ui.theme.BetsyTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,25 +25,31 @@ class MainActivity : ComponentActivity() {
             BetsyTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier .fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Home(appContainer)
+                    Main()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    BetsyTheme {
-        Greeting("Android")
+fun Main() {
+
+    val navigationController = rememberNavController()
+    
+    NavHost(navController = navigationController, startDestination = NavigationRoutes.Home.route) {
+        composable(NavigationRoutes.Home.route) {
+            Home(navigationController)
+        }
+        composable(NavigationRoutes.Menu.route) {
+            Menu(navigationController)
+        }
+        composable(NavigationRoutes.AddItem.route) {
+            AddItem(navigationController)
+        }
+        composable(NavigationRoutes.AddMenu.route) {
+            AddMenu(navigationController)
+        }
     }
 }
