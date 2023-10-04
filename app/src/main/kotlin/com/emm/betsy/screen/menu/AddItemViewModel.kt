@@ -7,52 +7,43 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emm.betsy.data.datasource.item.ItemDataSource
 import com.emm.betsy.data.entities.ItemEntity
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import menu.item.Item
 import java.time.Instant
 
 class AddItemViewModel(
     private val itemDataSource: ItemDataSource
-) : ViewModel() {
+): ViewModel() {
+
+    private val channelEvent = Channel<Event>()
+    val channelFlow: Flow<Event> = channelEvent.receiveAsFlow()
 
     var name by mutableStateOf("")
         private set
 
-    var description by mutableStateOf("")
+    var type by mutableStateOf(ItemType.ENTRY)
         private set
 
-    val allItems: StateFlow<List<Item>> = itemDataSource.fetchItems()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+    fun updateName(value: String): Unit = with(value) { name = this }
+
+    fun updateType(value: ItemType) = with(value) { type = this }
 
     fun addItem() = viewModelScope.launch {
         val entity = ItemEntity(
             name = name,
-            description = description,
+            type = type.name,
             createdAt = Instant.now().toEpochMilli(),
             updatedAt = Instant.now().toEpochMilli()
         )
         itemDataSource.insert(entity)
-        cleanValues()
+        channelEvent.send(Event.AddSuccess)
     }
 
-    private fun cleanValues() {
-        name = ""
-        description = ""
-    }
+}
 
-    fun updateName(value: String) {
-        name = value
-    }
-
-    fun updateDescription(value: String) {
-        description = value
-    }
-
+sealed interface Event {
+    object AddSuccess: Event
+    object None: Event
 }

@@ -1,5 +1,9 @@
 package com.emm.betsy
 
+import androidx.compose.foundation.border
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -10,6 +14,8 @@ import java.util.Locale
 import java.util.UUID
 
 fun Int.randomUUIDWithId() = "$this -> ${UUID.randomUUID()}"
+
+fun Modifier.log(color: Color = Color.Red) = then(Modifier.border(width = 1.dp, color = color))
 
 fun Long.dateToLegibleDate(): String {
     val localDateTime = LocalDateTime.ofInstant(
@@ -32,13 +38,15 @@ fun Long.formatDuration(): String {
         LocalDateTime.now()
     )
     val seconds = duration.seconds
-    return when {
-        seconds < 60 -> "just now"
-        seconds < 120 -> "1 minute"
-        seconds < 3600 -> "${seconds / 60} minutes"
-        seconds < 7200 -> "1 hour"
-        seconds < 86400 -> "${seconds / 3600} hours"
-        seconds < 172800 -> "1 day"
-        else -> "${seconds / 86400} days"
-    }
+    return "hace ${getFormat(seconds)}"
+}
+
+private fun getFormat(seconds: Long) = when {
+    seconds < 60 -> "justo ahora"
+    seconds < 120 -> "1 minuto"
+    seconds < 3600 -> "${seconds / 60} minutos"
+    seconds < 7200 -> "1 hora"
+    seconds < 86400 -> "${seconds / 3600} horas"
+    seconds < 172800 -> "1 dia"
+    else -> "${seconds / 86400} dias"
 }

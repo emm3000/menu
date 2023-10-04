@@ -1,6 +1,7 @@
 package com.emm.betsy.fastdi
 
 import android.content.Context
+import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.emm.betsy.EmmDatabase
@@ -20,7 +21,12 @@ class DefaultAppContainer(private val appContext: Context) : AppContainer {
         AndroidSqliteDriver(
             schema = EmmDatabase.Schema,
             context = appContext,
-            name = "betsy.db"
+            name = "betsy.db",
+            callback = object : AndroidSqliteDriver.Callback(EmmDatabase.Schema) {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    db.setForeignKeyConstraintsEnabled(true)
+                }
+            }
         )
     }
 

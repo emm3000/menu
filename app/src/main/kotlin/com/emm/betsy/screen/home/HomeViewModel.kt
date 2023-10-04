@@ -87,7 +87,7 @@ class HomeViewModel(
         val food = faker.food().dish()
         return ItemEntity(
             name = food,
-            description = faker.lorem().sentence(),
+            type = faker.lorem().sentence(),
             createdAt = Instant.now().toEpochMilli(),
             updatedAt = Instant.now().toEpochMilli()
         )

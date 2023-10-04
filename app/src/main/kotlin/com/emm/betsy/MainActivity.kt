@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.emm.betsy.screen.home.Home
 import com.emm.betsy.screen.menu.AddItem
+import com.emm.betsy.screen.menu.ItemList
 import com.emm.betsy.screen.menu.AddMenu
 import com.emm.betsy.screen.menu.Menu
 import com.emm.betsy.ui.theme.BetsyTheme
@@ -45,11 +46,14 @@ fun Main() {
         composable(NavigationRoutes.Menu.route) {
             Menu(navigationController)
         }
-        composable(NavigationRoutes.AddItem.route) {
-            AddItem(navigationController)
+        composable(NavigationRoutes.ItemList.route) {
+            ItemList(navigationController)
         }
         composable(NavigationRoutes.AddMenu.route) {
             AddMenu(navigationController)
+        }
+        composable(NavigationRoutes.AddItem.route) {
+            AddItem(navigationController)
         }
     }
 }

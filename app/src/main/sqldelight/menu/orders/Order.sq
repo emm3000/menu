@@ -1,0 +1,12 @@
+CREATE TABLE `Order` (
+    orderId INTEGER NOT NULL PRIMARY KEY,
+    menuId INTEGER NOT NULL,
+    createdAt INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL,
+    CONSTRAINT fk_menu_order FOREIGN KEY (menuId) REFERENCES Menu(menuId) ON DELETE CASCADE
+);
+
+createOrder:
+INSERT OR REPLACE
+INTO `Order`
+VALUES (?, ?, ?, ?);

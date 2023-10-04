@@ -1,7 +1,7 @@
 CREATE TABLE Item (
     itemId INTEGER NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
-    description TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    type TEXT NOT NULL,
     createdAt INTEGER NOT NULL,
     updatedAt INTEGER NOT NULL
 );
@@ -13,7 +13,8 @@ VALUES(?, ?, ?, ?, ?);
 
 getAllItems:
 SELECT *
-FROM Item;
+FROM Item
+ORDER BY createdAt DESC;
 
 getItemsByMenu:
 SELECT Item.*
@@ -21,5 +22,21 @@ FROM Menu
 INNER JOIN MenuItem ON Menu.menuId = MenuItem.menuId
 INNER JOIN Item ON MenuItem.itemId = Item.itemId
 WHERE Menu.menuId = ?;
+
+deleteItem:
+DELETE FROM Item
+WHERE itemId = ?;
+
+updateItem:
+UPDATE OR REPLACE Item
+SET name = ?, type = ?, updatedAt = ?
+WHERE itemId = ?;
+
+selectItemsByName:
+SELECT *
+FROM Item
+WHERE name LIKE '%' || :nombre || '%'
+ORDER BY createdAt DESC;
+
 
 

@@ -14,3 +14,9 @@ VALUES(?, ?, ?, ?, ?);
 getAllMenus:
 SELECT *
 FROM Menu;
+
+getLastMenu:
+SELECT *
+FROM Menu
+ORDER BY createdAt DESC
+LIMIT 1;
