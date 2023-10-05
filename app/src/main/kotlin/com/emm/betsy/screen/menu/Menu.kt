@@ -18,19 +18,29 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.emm.betsy.ui.theme.BetsyTheme
+import menu.item.Item
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Menu(
     navigationController: NavController,
+    vm: MenuViewModel = koinViewModel()
 ) {
+
+    val list: Pair<List<Item>, List<Item>> by vm.state.collectAsState()
+
     Menu(
-        popBackStack = { navigationController.popBackStack() }
+        popBackStack = { navigationController.popBackStack() },
+        startedDish = list.first,
+        backgroundDish = list.second
     )
 }
 
@@ -38,8 +48,8 @@ fun Menu(
 @ExperimentalMaterial3Api
 @Composable
 private fun Menu(
-    startedDish: List<String> = emptyList(),
-    backgroundDish: List<String> = emptyList(),
+    startedDish: List<Item> = emptyList(),
+    backgroundDish: List<Item> = emptyList(),
     popBackStack: () -> Unit = {}
 ) {
 
@@ -75,7 +85,7 @@ private fun Menu(
                 )
             } else {
                 startedDish.forEach {
-                    Text(text = "- $it")
+                    Text(text = "- ${it.name}")
                 }
             }
 
@@ -90,7 +100,7 @@ private fun Menu(
                 )
             } else {
                 backgroundDish.forEach {
-                    Text(text = "- $it")
+                    Text(text = "- ${it.name}")
                 }
             }
 

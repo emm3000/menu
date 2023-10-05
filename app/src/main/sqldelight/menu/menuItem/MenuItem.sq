@@ -16,3 +16,7 @@ VALUES(?, ?, ?, ?);
 getAllMenuItems:
 SELECT *
 FROM MenuItem;
+
+deleteMenu:
+DELETE FROM MenuItem
+WHERE menuId = ?;

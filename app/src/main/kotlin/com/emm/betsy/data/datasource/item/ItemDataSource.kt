@@ -8,10 +8,12 @@ import com.emm.betsy.data.entities.MenuEntity
 import com.emm.betsy.data.entities.MenuItemEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import menu.item.Item
 import menu.menu.Menu
 import java.time.Instant
+import java.util.UUID
 
 class ItemDataSource(db: EmmDatabase) {
 
@@ -31,7 +33,7 @@ class ItemDataSource(db: EmmDatabase) {
         return menuItemQueries.getAllMenuItems().asFlow().mapToList(Dispatchers.IO)
     }
 
-    fun getItemsByMenu(menuId: Long): Flow<List<Item>> {
+    fun getItemsByMenu(menuId: Long = 1): Flow<List<Item>> {
         return itemQueries.getItemsByMenu(menuId).asFlow().mapToList(Dispatchers.IO)
     }
 
@@ -104,6 +106,38 @@ class ItemDataSource(db: EmmDatabase) {
                 createdAt = menuItemEntity.createdAt,
                 updatedAt = menuItemEntity.updatedAt
             )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    suspend fun createMenu(
+        listOfItem: List<Item>
+    ) {
+        try {
+            menuItemQueries.deleteMenu(1)
+            menuQueries.insertMenu(
+                date = Instant.now().toEpochMilli(),
+                description = UUID.randomUUID().toString(),
+                createdAt = Instant.now().toEpochMilli(),
+                updatedAt = Instant.now().toEpochMilli(),
+                menuId = 1
+            )
+            val lastMenu: Menu = menuQueries.getLastMenu()
+                .asFlow()
+                .mapToList(Dispatchers.IO)
+                .firstOrNull()
+                ?.lastOrNull() ?: return
+
+            listOfItem.forEach {
+                menuItemQueries.insertMenuItem(
+                    menuId = lastMenu.menuId,
+                    itemId = it.itemId,
+                    createdAt = Instant.now().toEpochMilli(),
+                    updatedAt = Instant.now().toEpochMilli()
+                )
+            }
+
         } catch (e: Exception) {
             e.printStackTrace()
         }

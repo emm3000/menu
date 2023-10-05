@@ -32,7 +32,7 @@ class AddItemViewModel(
 
     fun addItem() = viewModelScope.launch {
         val entity = ItemEntity(
-            name = name,
+            name = name.uppercase(),
             type = type.name,
             createdAt = Instant.now().toEpochMilli(),
             updatedAt = Instant.now().toEpochMilli()

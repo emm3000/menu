@@ -2,79 +2,54 @@
 
 package com.emm.betsy.screen.menu
 
-import android.app.appsearch.AppSearchBatchResult
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.emm.betsy.dateToLegibleDate
-import com.emm.betsy.formatDuration
 import com.emm.betsy.ui.theme.BetsyTheme
 import menu.item.Item
 import org.koin.androidx.compose.koinViewModel
-import java.util.logging.Filter
 
 @Composable
 fun AddMenu(navigationController: NavHostController, vm: AddMenuViewModel = koinViewModel()) {
@@ -87,6 +62,10 @@ fun AddMenu(navigationController: NavHostController, vm: AddMenuViewModel = koin
         onChangeSearchText = vm::updateSearchText,
         entryList = list.first,
         secondList = list.second,
+        selectedList = vm.selectedItems,
+        onSelectedItem = vm::addItem,
+        removeItem = vm::removeItem,
+        createMenu = vm::createMenu
     )
 }
 
@@ -98,6 +77,10 @@ private fun AddMenu(
     onChangeSearchText: (String) -> Unit = {},
     entryList: List<Item> = emptyList(),
     secondList: List<Item> = emptyList(),
+    selectedList: List<Item> = emptyList(),
+    onSelectedItem: (Item) -> Unit = {},
+    removeItem: (Int) -> Unit = {},
+    createMenu: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -121,19 +104,31 @@ private fun AddMenu(
                 }
             }
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            onClick = createMenu, modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp)
+        ) {
+            Text(text = "Create Menu")
+        }
         FlowRow(
             modifier = Modifier,
             horizontalArrangement = Arrangement.spacedBy(5.dp),
         ) {
-            entryList.forEach {
+            selectedList.forEachIndexed { index, it ->
                 FilterChip(
                     selected = false,
-                    onClick = { /*TODO*/ },
+                    onClick = { },
+                    border = FilterChipDefaults.filterChipBorder(
+                        borderColor = when (ItemType.toItemType(it.type)) {
+                            ItemType.ENTRY -> Color.Magenta
+                            ItemType.SECOND -> Color.Green
+                        }
+                    ),
                     label = { Text(text = it.name) },
                     trailingIcon = {
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { removeItem(index) },
                             modifier = Modifier.size(24.dp),
                             contentPadding = PaddingValues(0.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -170,7 +165,7 @@ private fun AddMenu(
                 )
             }
             items(entryList) {
-                SimpleAnotherComponent(item = it)
+                SimpleAnotherComponent(item = it, onSelectedItem)
             }
             item(span = { GridItemSpan(2) }) {
                 Text(
@@ -185,43 +180,9 @@ private fun AddMenu(
                 )
             }
             items(secondList) {
-                SimpleAnotherComponent(item = it)
+                SimpleAnotherComponent(item = it, onSelectedItem)
             }
         }
-//        LazyColumn(
-//            state = rememberLazyListState(),
-//        ) {
-//            item {
-//                Text(
-//                    text = "Caldos o entradas",
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(vertical = 10.dp)
-//                        .background(MaterialTheme.colorScheme.background),
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 20.sp,
-//                    style = MaterialTheme.typography.titleMedium
-//                )
-//            }
-//            items(entryList) {
-//                SimpleAnotherComponent(item = it)
-//            }
-//            item {
-//                Text(
-//                    text = "Segundos",
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(vertical = 10.dp)
-//                        .background(MaterialTheme.colorScheme.background),
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 20.sp,
-//                    style = MaterialTheme.typography.titleMedium
-//                )
-//            }
-//            items(secondList) {
-//                SimpleAnotherComponent(item = it)
-//            }
-//        }
     }
 
 }
@@ -229,13 +190,14 @@ private fun AddMenu(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleAnotherComponent(
-    item: Item
+    item: Item,
+    onSelectedItem: (Item) -> Unit
 ) {
     OutlinedCard(
         modifier = Modifier
             .fillMaxSize()
             .height(75.dp),
-        onClick = {},
+        onClick = { onSelectedItem(item) },
         border = when (ItemType.toItemType(item.type)) {
             ItemType.ENTRY -> BorderStroke(1.dp, Color.Magenta)
             ItemType.SECOND -> BorderStroke(1.dp, Color.Green)

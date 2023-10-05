@@ -4,6 +4,7 @@ import com.emm.betsy.screen.home.HomeViewModel
 import com.emm.betsy.screen.menu.AddItemViewModel
 import com.emm.betsy.screen.menu.AddMenuViewModel
 import com.emm.betsy.screen.menu.ItemListViewModel
+import com.emm.betsy.screen.menu.MenuViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
@@ -14,4 +15,5 @@ val viewModelModule = module {
     viewModel { ItemListViewModel(get()) }
     viewModelOf(::AddItemViewModel)
     viewModelOf(::AddMenuViewModel)
+    viewModelOf(::MenuViewModel)
 }

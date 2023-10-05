@@ -1,24 +1,21 @@
 package com.emm.betsy.screen.menu
 
-import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emm.betsy.data.datasource.item.ItemDataSource
-import com.emm.betsy.data.datasource.person.PersonDataSource
 import com.emm.betsy.screen.menu.ItemType.ENTRY
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import menu.item.Item
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -29,8 +26,10 @@ class AddMenuViewModel(
     var searchText by mutableStateOf("")
         private set
 
+    val selectedItems = mutableStateListOf<Item>()
+
     // first value -> entry  ----- second value -> seconds
-    val pairList = snapshotFlow { searchText }
+    val pairList: StateFlow<Pair<List<Item>, List<Item>>> = snapshotFlow { searchText }
         .flatMapLatest {
             itemSource.getItemsByName(it)
         }
@@ -43,23 +42,28 @@ class AddMenuViewModel(
             initialValue = Pair(emptyList(), emptyList())
         )
 
-    val test: StateFlow<String> = snapshotFlow { searchText }
-        .map {
-            "change[${it.length}] $it"
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = ""
-        )
-
-
     fun updateSearchText(value: String) {
         searchText = value
     }
 
     fun cleanSearchText() {
         searchText = ""
+    }
+
+    fun addItem(value: Item) {
+        val setOf: MutableSet<Item> = selectedItems.toMutableSet().apply {
+            add(value)
+        }
+        selectedItems.clear()
+        selectedItems.addAll(setOf)
+    }
+
+    fun removeItem(value: Int) {
+        selectedItems.removeAt(value)
+    }
+
+    fun createMenu() = viewModelScope.launch {
+        itemSource.createMenu(selectedItems)
     }
 
 }

@@ -116,18 +116,18 @@ fun AnotherComponent(
     deleteItem: (Long) -> Unit,
 ) {
 
-    val randomColor = rememberSaveable(stateSaver = listSaver<Color, Any>(
-        save = { listOf(it.red, it.green, it.blue) },
-        restore = { Color(it[0] as Float, it[1] as Float, it[2] as Float) }
-    )) {
-        mutableStateOf(
-            Color(
-                red = Random.nextFloat(),
-                green = Random.nextFloat(),
-                blue = Random.nextFloat(),
-            )
-        )
-    }
+//    val randomColor = rememberSaveable(stateSaver = listSaver<Color, Any>(
+//        save = { listOf(it.red, it.green, it.blue) },
+//        restore = { Color(it[0] as Float, it[1] as Float, it[2] as Float) }
+//    )) {
+//        mutableStateOf(
+//            Color(
+//                red = Random.nextFloat(),
+//                green = Random.nextFloat(),
+//                blue = Random.nextFloat(),
+//            )
+//        )
+//    }
 
     OutlinedCard(
         modifier = Modifier
@@ -160,7 +160,6 @@ fun AnotherComponent(
             }
             Box(
                 modifier = Modifier
-                    .background(randomColor.value)
                     .fillMaxHeight(),
                 contentAlignment = Alignment.Center,
             ) {
