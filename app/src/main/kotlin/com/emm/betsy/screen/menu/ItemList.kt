@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -58,7 +59,10 @@ fun ItemList(navigationController: NavHostController, vm: ItemListViewModel = ko
         itemList = itemList,
         deleteItem = vm::deleteItem,
         popBackStack = { navigationController.popBackStack() },
-        navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) }
+        navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) },
+        navigateToUpdateItem = {
+            navigationController.navigate(NavigationRoutes.UpdateItem.buildRoute(it.name, it.type, it.itemId))
+        }
     )
 
 }
@@ -68,7 +72,8 @@ private fun ItemList(
     itemList: List<Item> = emptyList(),
     deleteItem: (Long) -> Unit = {},
     popBackStack: () -> Unit = {},
-    navigateToAddItem: () -> Unit = {}
+    navigateToAddItem: () -> Unit = {},
+    navigateToUpdateItem: (Item) -> Unit = {}
 ) {
 
     BaseScaffold(
@@ -96,11 +101,12 @@ private fun ItemList(
             items(itemList) { item ->
                 AnotherComponent(
                     item = item,
-                    deleteItem = deleteItem
+                    deleteItem = deleteItem,
+                    updateItem = navigateToUpdateItem
                 )
             }
-            
-            item { 
+
+            item {
                 Spacer(modifier = Modifier.height(70.dp))
             }
 
@@ -114,20 +120,8 @@ private fun ItemList(
 fun AnotherComponent(
     item: Item,
     deleteItem: (Long) -> Unit,
+    updateItem: (Item) -> Unit
 ) {
-
-//    val randomColor = rememberSaveable(stateSaver = listSaver<Color, Any>(
-//        save = { listOf(it.red, it.green, it.blue) },
-//        restore = { Color(it[0] as Float, it[1] as Float, it[2] as Float) }
-//    )) {
-//        mutableStateOf(
-//            Color(
-//                red = Random.nextFloat(),
-//                green = Random.nextFloat(),
-//                blue = Random.nextFloat(),
-//            )
-//        )
-//    }
 
     OutlinedCard(
         modifier = Modifier
@@ -168,6 +162,7 @@ fun AnotherComponent(
                         Icon(imageVector = Icons.Filled.Delete, contentDescription = null)
                     }
                     IconButton(onClick = {
+                        updateItem.invoke(item)
                     }) {
                         Icon(imageVector = Icons.Filled.Edit, contentDescription = null)
                     }

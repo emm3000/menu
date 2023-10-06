@@ -50,3 +50,5 @@ private fun getFormat(seconds: Long) = when {
     seconds < 172800 -> "1 dia"
     else -> "${seconds / 86400} dias"
 }
+
+fun currentTime(): Long = Instant.now().toEpochMilli()

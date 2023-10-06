@@ -8,7 +8,7 @@ enum class ItemType(val label: String) {
         fun toItemType(name: String): ItemType = when(name) {
             "ENTRY" -> ENTRY
             "SECOND" -> SECOND
-            else -> throw IllegalArgumentException()
+            else -> ENTRY
         }
     }
 }

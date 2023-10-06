@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.emm.betsy"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.emm.betsy"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 

@@ -8,6 +8,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emm.betsy.data.datasource.item.ItemDataSource
+import com.emm.betsy.data.datasource.menu.MenuDataSource
 import com.emm.betsy.screen.menu.ItemType.ENTRY
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,7 +21,7 @@ import menu.item.Item
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddMenuViewModel(
-    private val itemSource: ItemDataSource
+    private val itemSource: ItemDataSource,
 ) : ViewModel() {
 
     var searchText by mutableStateOf("")

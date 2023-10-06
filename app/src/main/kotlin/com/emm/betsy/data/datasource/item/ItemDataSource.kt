@@ -3,7 +3,7 @@ package com.emm.betsy.data.datasource.item
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.emm.betsy.EmmDatabase
-import com.emm.betsy.data.entities.ItemEntity
+import com.emm.betsy.currentTime
 import com.emm.betsy.data.entities.MenuEntity
 import com.emm.betsy.data.entities.MenuItemEntity
 import kotlinx.coroutines.Dispatchers
@@ -11,15 +11,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import menu.item.Item
+import menu.item.ItemQueries
 import menu.menu.Menu
+import menu.menu.MenuQueries
+import menu.menuItem.MenuItemQueries
 import java.time.Instant
 import java.util.UUID
 
 class ItemDataSource(db: EmmDatabase) {
 
-    private val itemQueries = db.itemQueries
-    private val menuQueries = db.menuQueries
-    private val menuItemQueries = db.menuItemQueries
+    private val itemQueries: ItemQueries = db.itemQueries
+    private val menuQueries: MenuQueries = db.menuQueries
+    private val menuItemQueries: MenuItemQueries = db.menuItemQueries
 
     fun fetchItems(): Flow<List<Item>> {
         return itemQueries.getAllItems().asFlow().mapToList(Dispatchers.IO)
@@ -47,14 +50,14 @@ class ItemDataSource(db: EmmDatabase) {
 
     suspend fun updateItem(
         name: String,
-        description: String,
+        type: String,
         id: Long
     ) = withContext(Dispatchers.IO) {
         try {
             itemQueries.updateItem(
                 name = name,
-                type = description,
-                updatedAt = Instant.now().toEpochMilli(),
+                type = type,
+                updatedAt = currentTime(),
                 itemId = id
             )
         } catch (e: Exception) {
@@ -70,14 +73,17 @@ class ItemDataSource(db: EmmDatabase) {
         }
     }
 
-    suspend fun insert(itemEntity: ItemEntity): Unit = withContext(Dispatchers.IO) {
+    suspend fun insert(
+        name: String,
+        type: String
+    ): Unit = withContext(Dispatchers.IO) {
         try {
             itemQueries.insertItem(
-                itemId = itemEntity.itemId,
-                name = itemEntity.name,
-                type = itemEntity.type,
-                createdAt = itemEntity.createdAt,
-                updatedAt = itemEntity.updatedAt
+                itemId = null,
+                name = name,
+                type = type,
+                createdAt = currentTime(),
+                updatedAt = currentTime()
             )
         } catch (e: Exception) {
             e.printStackTrace()

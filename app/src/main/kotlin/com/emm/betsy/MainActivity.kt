@@ -11,8 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.emm.betsy.screen.home.Home
-import com.emm.betsy.screen.menu.AddItem
+import com.emm.betsy.screen.additem.AddItem
+import com.emm.betsy.screen.additem.UpdateItem
 import com.emm.betsy.screen.menu.ItemList
 import com.emm.betsy.screen.menu.AddMenu
 import com.emm.betsy.screen.menu.Menu
@@ -25,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BetsyTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier .fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Main()
                 }
             }
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
 fun Main() {
 
     val navigationController = rememberNavController()
-    
+
     NavHost(navController = navigationController, startDestination = NavigationRoutes.Home.route) {
         composable(NavigationRoutes.Home.route) {
             Home(navigationController)
@@ -54,6 +56,24 @@ fun Main() {
         }
         composable(NavigationRoutes.AddItem.route) {
             AddItem(navigationController)
+        }
+        composable(
+            route = NavigationRoutes.UpdateItem.route,
+            arguments = listOf(
+                navArgument("name") { defaultValue = "" },
+                navArgument("type") { defaultValue = "" },
+                navArgument("id") { defaultValue = 0L },
+            )
+        ) { backStackEntry ->
+            val name: String = backStackEntry.arguments?.getString("name") ?: ""
+            val type: String = backStackEntry.arguments?.getString("type") ?: ""
+            val id: Long = backStackEntry.arguments?.getLong("id") ?: 0L
+            UpdateItem(
+                navController = navigationController,
+                name = name,
+                type = type,
+                id = id
+            )
         }
     }
 }

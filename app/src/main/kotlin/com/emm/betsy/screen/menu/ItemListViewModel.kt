@@ -20,7 +20,6 @@ class ItemListViewModel(
             initialValue = emptyList()
         )
 
-
     fun deleteItem(id: Long) = viewModelScope.launch {
         itemDataSource.deleteItem(id)
     }
