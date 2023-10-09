@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun Main() {
 
@@ -63,16 +62,19 @@ fun Main() {
                 navArgument("name") { defaultValue = "" },
                 navArgument("type") { defaultValue = "" },
                 navArgument("id") { defaultValue = 0L },
+                navArgument("image") { defaultValue = "" },
             )
         ) { backStackEntry ->
             val name: String = backStackEntry.arguments?.getString("name") ?: ""
             val type: String = backStackEntry.arguments?.getString("type") ?: ""
             val id: Long = backStackEntry.arguments?.getLong("id") ?: 0L
+            val image: String? = backStackEntry.arguments?.getString("image")
             UpdateItem(
                 navController = navigationController,
                 name = name,
                 type = type,
-                id = id
+                id = id,
+                image = image
             )
         }
     }

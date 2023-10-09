@@ -61,7 +61,7 @@ fun ItemList(navigationController: NavHostController, vm: ItemListViewModel = ko
         popBackStack = { navigationController.popBackStack() },
         navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) },
         navigateToUpdateItem = {
-            navigationController.navigate(NavigationRoutes.UpdateItem.buildRoute(it.name, it.type, it.itemId))
+            navigationController.navigate(NavigationRoutes.UpdateItem.buildRoute(it.name, it.type, it.itemId, it.imageUri))
         }
     )
 
@@ -185,7 +185,8 @@ fun ItemListPreview() {
                     name = "Random String $it",
                     type = "Random description $it",
                     createdAt = Random.nextLong(),
-                    updatedAt = Random.nextLong()
+                    updatedAt = Random.nextLong(),
+                    imageUri = null
                 )
             }
             ItemList(

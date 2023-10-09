@@ -51,6 +51,7 @@ class ItemDataSource(db: EmmDatabase) {
     suspend fun updateItem(
         name: String,
         type: String,
+        imageUri: String?,
         id: Long
     ) = withContext(Dispatchers.IO) {
         try {
@@ -58,6 +59,7 @@ class ItemDataSource(db: EmmDatabase) {
                 name = name,
                 type = type,
                 updatedAt = currentTime(),
+                imageUri = imageUri,
                 itemId = id
             )
         } catch (e: Exception) {
@@ -75,13 +77,15 @@ class ItemDataSource(db: EmmDatabase) {
 
     suspend fun insert(
         name: String,
-        type: String
+        type: String,
+        imageUri: String?
     ): Unit = withContext(Dispatchers.IO) {
         try {
             itemQueries.insertItem(
                 itemId = null,
                 name = name,
                 type = type,
+                imageUri = imageUri,
                 createdAt = currentTime(),
                 updatedAt = currentTime()
             )

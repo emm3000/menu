@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 class EditorItemViewModel(
     nameFromBundle: String,
     typeFromBundle: String,
+    imageFromBundle: String?,
     private val itemId: Long,
     private val itemDataSource: ItemDataSource
 ) : ViewModel() {
@@ -25,6 +26,9 @@ class EditorItemViewModel(
     var name by mutableStateOf(nameFromBundle)
         private set
 
+    var imageUri: String? by mutableStateOf(imageFromBundle)
+        private set
+
     var type by mutableStateOf(ItemType.toItemType(typeFromBundle))
         private set
 
@@ -32,10 +36,15 @@ class EditorItemViewModel(
 
     fun updateType(value: ItemType) = with(value) { type = this }
 
+    fun updateImageUri(value: String?) {
+        imageUri = value
+    }
+
     fun addItem() = viewModelScope.launch {
         itemDataSource.insert(
             name = name.uppercase(),
-            type = type.name
+            type = type.name,
+            imageUri = imageUri
         )
         channelEvent.send(Event.AddSuccess)
     }
@@ -44,7 +53,8 @@ class EditorItemViewModel(
         itemDataSource.updateItem(
             name = name,
             type = type.name,
-            id = itemId
+            id = itemId,
+            imageUri = imageUri
         )
         channelEvent.send(Event.AddSuccess)
     }

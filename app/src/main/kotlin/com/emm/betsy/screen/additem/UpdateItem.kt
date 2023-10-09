@@ -14,8 +14,9 @@ fun UpdateItem(
     name: String,
     type: String,
     id: Long,
+    image: String?,
     vm: EditorItemViewModel = koinViewModel(
-        parameters = { parametersOf(name, type, id) }
+        parameters = { parametersOf(name, type, image, id) }
     )
 ) {
 
@@ -34,8 +35,10 @@ fun UpdateItem(
         nameValue = vm.name,
         changeName = vm::updateName,
         descriptionValue = vm.type,
+        imageUri = vm.imageUri,
         changeDescription = vm::updateType,
         buttonAction = vm::updateItem,
+        updateImageUri = vm::updateImageUri,
         buttonName = "Update Item"
     )
 

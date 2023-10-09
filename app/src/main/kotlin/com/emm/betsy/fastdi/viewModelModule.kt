@@ -13,12 +13,15 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { ItemListViewModel(get()) }
-    viewModel { parameters: ParametersHolder -> EditorItemViewModel(
-        parameters[0],
-        parameters[1],
-        parameters.get(),
-        get()
-    ) }
+    viewModel { parameters: ParametersHolder ->
+        EditorItemViewModel(
+            nameFromBundle = parameters[0],
+            typeFromBundle = parameters[1],
+            imageFromBundle = parameters[2],
+            itemId = parameters.get(),
+            itemDataSource = get()
+        )
+    }
     viewModelOf(::AddMenuViewModel)
     viewModelOf(::MenuViewModel)
 }

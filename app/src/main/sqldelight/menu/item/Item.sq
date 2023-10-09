@@ -2,6 +2,7 @@ CREATE TABLE Item (
     itemId INTEGER NOT NULL PRIMARY KEY,
     name TEXT NOT NULL UNIQUE,
     type TEXT NOT NULL,
+    imageUri TEXT,
     createdAt INTEGER NOT NULL,
     updatedAt INTEGER NOT NULL
 );
@@ -9,7 +10,7 @@ CREATE TABLE Item (
 insertItem:
 INSERT OR REPLACE
 INTO Item
-VALUES(?, ?, ?, ?, ?);
+VALUES(?, ?, ?, ?, ?, ?);
 
 getAllItems:
 SELECT *
@@ -29,7 +30,7 @@ WHERE itemId = ?;
 
 updateItem:
 UPDATE OR REPLACE Item
-SET name = ?, type = ?, updatedAt = ?
+SET name = ?, type = ?, updatedAt = ?, imageUri = ?
 WHERE itemId = ?;
 
 selectItemsByName:

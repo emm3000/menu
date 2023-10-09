@@ -23,7 +23,7 @@ import org.koin.core.parameter.parametersOf
 fun AddItem(
     navController: NavController,
     vm: EditorItemViewModel = koinViewModel(
-        parameters = { parametersOf("", "", 0L) }
+        parameters = { parametersOf("", "", "", 0L) }
     )
 ) {
 
@@ -43,6 +43,8 @@ fun AddItem(
         changeName = vm::updateName,
         descriptionValue = vm.type,
         changeDescription = vm::updateType,
+        imageUri = vm.imageUri,
+        updateImageUri = vm::updateImageUri,
         buttonAction = vm::addItem,
         buttonName = "Add Item"
     )

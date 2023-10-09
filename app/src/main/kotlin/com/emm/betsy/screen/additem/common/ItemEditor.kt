@@ -1,26 +1,48 @@
 package com.emm.betsy.screen.additem.common
 
 import android.content.res.Configuration
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.emm.betsy.screen.additem.RadioButtonTaskType
 import com.emm.betsy.screen.menu.ItemType
 import com.emm.betsy.ui.theme.BetsyTheme
@@ -32,6 +54,8 @@ import kotlinx.coroutines.launch
 fun ItemEditor(
     title: String = "",
     nameValue: String = "",
+    imageUri: String? = null,
+    updateImageUri: (String?) -> Unit = {},
     changeName: (String) -> Unit = {},
     descriptionValue: ItemType = ItemType.ENTRY,
     changeDescription: (ItemType) -> Unit = {},
@@ -42,6 +66,11 @@ fun ItemEditor(
     val keyboardController = LocalSoftwareKeyboardController.current
     val coroutineScope = rememberCoroutineScope()
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { inputUri -> updateImageUri(inputUri.toString()) }
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +80,7 @@ fun ItemEditor(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 30.dp),
-            verticalArrangement = Arrangement.spacedBy(15.dp)
+            verticalArrangement = Arrangement.spacedBy(15.dp),
         ) {
 
             Text(text = title, style = MaterialTheme.typography.titleLarge)
@@ -74,6 +103,48 @@ fun ItemEditor(
                 selectedOption = descriptionValue,
                 onOptionSelected = changeDescription
             )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(.8f)
+                    .height(180.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(50f))
+                    .border(1.dp, Color.White, RoundedCornerShape(50f))
+                    .clickable {
+                        launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                contentAlignment = Alignment.Center,
+            ) {
+                if (!imageUri.isNullOrEmpty()) {
+                    AsyncImage(
+                        model = imageUri,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(50f)),
+                        contentScale = ContentScale.Crop
+                    )
+                    IconButton(
+                        onClick = {
+                            updateImageUri(null)
+                        },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(end = 5.dp, top = 5.dp)
+                    ) {
+                        Icon(imageVector = Icons.Filled.Close, contentDescription = null)
+                    }
+                } else {
+                    Text(
+                        text = "Seleccionar foto",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                }
+
+            }
 
             FilledTonalButton(onClick = {
                 coroutineScope.launch {
