@@ -37,6 +37,10 @@ android {
     buildFeatures {
         compose = true
     }
+
+    viewBinding {
+        enable = true
+    }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
     }
@@ -65,6 +69,11 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.10.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
     implementation("app.cash.sqldelight:android-driver:2.0.0")
     implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
@@ -74,7 +83,6 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:3.5.0")
     implementation("io.insert-koin:koin-android:3.5.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
-//    implementation("androidx.compose.material3:material3:1.2.0-alpha08")
 }
 
 sqldelight {

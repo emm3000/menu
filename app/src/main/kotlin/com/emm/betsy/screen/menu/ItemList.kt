@@ -1,9 +1,11 @@
 package com.emm.betsy.screen.menu
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -26,20 +30,27 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.emm.betsy.NavigationRoutes
 import com.emm.betsy.components.BaseScaffold
-import com.emm.betsy.dateToLegibleDate
-import com.emm.betsy.formatDuration
 import com.emm.betsy.ui.theme.BetsyTheme
+import kotlinx.coroutines.delay
 import menu.item.Item
 import org.koin.androidx.compose.koinViewModel
 import kotlin.random.Random
@@ -70,6 +81,7 @@ private fun ItemList(
     navigateToUpdateItem: (Item) -> Unit = {}
 ) {
 
+
     BaseScaffold(
         popBackStack = popBackStack,
         title = "Add item",
@@ -78,13 +90,15 @@ private fun ItemList(
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
         }
-    ) {
-        LazyColumn(
+    ) { paddingValues ->
+        LazyVerticalGrid(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            state = rememberLazyListState(),
-            contentPadding = it
+                .padding(horizontal = 10.dp),
+            columns = GridCells.Fixed(2),
+            contentPadding = paddingValues,
+            verticalArrangement = Arrangement.spacedBy(5.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
             if (itemList.isEmpty()) {
                 item {
@@ -92,7 +106,9 @@ private fun ItemList(
                     Text(text = "Sin items", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
                 }
             }
-            items(itemList) { item ->
+            items(itemList, key = {
+                it.itemId
+            }) { item ->
                 AnotherComponent(
                     item = item,
                     deleteItem = deleteItem,
@@ -110,6 +126,35 @@ private fun ItemList(
 }
 
 @Composable
+fun RandomComponent(item: Item) {
+
+    val ajaj: MutableState<String?> = remember {
+        mutableStateOf(item.imageUri)
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        delay(200L)
+        ajaj.value = item.imageUri
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .border(1.dp, Color.White, RoundedCornerShape(10))
+    ) {
+        AsyncImage(
+            model = item.imageUri,
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(10))
+        )
+    }
+}
+
+@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun AnotherComponent(
     item: Item,
@@ -120,50 +165,63 @@ fun AnotherComponent(
     OutlinedCard(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 10.dp),
-        onClick = {}
+            .height(140.dp),
+        onClick = {},
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .height(IntrinsicSize.Min),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(10.dp)
-                    .weight(1f)
-            ) {
-                Text(
-                    text = item.name,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
-                Text(
-                    text = ItemType.toItemType(item.type).label, overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
-                Text(text = item.createdAt.dateToLegibleDate())
-                Text(text = item.createdAt.formatDuration())
-            }
+            AsyncImage(
+                model = item.imageUri,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
             Box(
                 modifier = Modifier
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.Center,
+                    .fillMaxSize()
+                    .background(color = Color.Black.copy(0.5f))
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
             ) {
-                Column {
-                    IconButton(onClick = { deleteItem.invoke(item.itemId) }) {
-                        Icon(imageVector = Icons.Filled.Delete, contentDescription = null)
-                    }
-                    IconButton(onClick = {
-                        updateItem.invoke(item)
-                    }) {
-                        Icon(imageVector = Icons.Filled.Edit, contentDescription = null)
-                    }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
+                    Text(
+                        text = item.name,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = ItemType.toItemType(item.type).label, overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
                 }
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Row {
+                        IconButton(onClick = { deleteItem.invoke(item.itemId) }) {
+                            Icon(imageVector = Icons.Filled.Delete, contentDescription = null)
+                        }
+                        IconButton(onClick = {
+                            updateItem.invoke(item)
+                        }) {
+                            Icon(imageVector = Icons.Filled.Edit, contentDescription = null)
+                        }
+                    }
 
+                }
             }
         }
+
 
     }
 }
