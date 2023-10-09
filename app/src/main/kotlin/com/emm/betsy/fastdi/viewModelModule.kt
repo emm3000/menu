@@ -15,9 +15,6 @@ val viewModelModule = module {
     viewModel { ItemListViewModel(get()) }
     viewModel { parameters: ParametersHolder ->
         EditorItemViewModel(
-            nameFromBundle = parameters[0],
-            typeFromBundle = parameters[1],
-            imageFromBundle = parameters[2],
             itemId = parameters.get(),
             itemDataSource = get()
         )

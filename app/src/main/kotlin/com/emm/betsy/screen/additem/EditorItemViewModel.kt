@@ -9,13 +9,13 @@ import com.emm.betsy.data.datasource.item.ItemDataSource
 import com.emm.betsy.screen.menu.ItemType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class EditorItemViewModel(
-    nameFromBundle: String,
-    typeFromBundle: String,
-    imageFromBundle: String?,
     private val itemId: Long,
     private val itemDataSource: ItemDataSource
 ) : ViewModel() {
@@ -23,14 +23,24 @@ class EditorItemViewModel(
     private val channelEvent = Channel<Event>()
     val channelFlow: Flow<Event> = channelEvent.receiveAsFlow()
 
-    var name by mutableStateOf(nameFromBundle)
+    var name by mutableStateOf("")
         private set
 
-    var imageUri: String? by mutableStateOf(imageFromBundle)
+    var imageUri: String? by mutableStateOf("")
         private set
 
-    var type by mutableStateOf(ItemType.toItemType(typeFromBundle))
+    var type by mutableStateOf(ItemType.ENTRY)
         private set
+
+    init {
+        itemDataSource.getItemById(itemId)
+            .map { it.getOrNull(0) }
+            .onEach {
+                name = it?.name ?: ""
+                imageUri = it?.imageUri ?: ""
+                type = ItemType.toItemType(it?.type ?: "")
+            }.launchIn(viewModelScope)
+    }
 
     fun updateName(value: String): Unit = with(value) { name = this }
 

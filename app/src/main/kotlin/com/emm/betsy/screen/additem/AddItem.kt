@@ -23,7 +23,7 @@ import org.koin.core.parameter.parametersOf
 fun AddItem(
     navController: NavController,
     vm: EditorItemViewModel = koinViewModel(
-        parameters = { parametersOf("", "", "", 0L) }
+        parameters = { parametersOf(0L) }
     )
 ) {
 

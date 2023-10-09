@@ -58,23 +58,13 @@ fun Main() {
         }
         composable(
             route = NavigationRoutes.UpdateItem.route,
-            arguments = listOf(
-                navArgument("name") { defaultValue = "" },
-                navArgument("type") { defaultValue = "" },
-                navArgument("id") { defaultValue = 0L },
-                navArgument("image") { defaultValue = "" },
-            )
+            arguments = listOf(navArgument("id") { defaultValue = 0L })
         ) { backStackEntry ->
-            val name: String = backStackEntry.arguments?.getString("name") ?: ""
-            val type: String = backStackEntry.arguments?.getString("type") ?: ""
             val id: Long = backStackEntry.arguments?.getLong("id") ?: 0L
-            val image: String? = backStackEntry.arguments?.getString("image")
+
             UpdateItem(
                 navController = navigationController,
-                name = name,
-                type = type,
                 id = id,
-                image = image
             )
         }
     }

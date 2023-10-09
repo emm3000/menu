@@ -11,13 +11,8 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun UpdateItem(
     navController: NavController,
-    name: String,
-    type: String,
     id: Long,
-    image: String?,
-    vm: EditorItemViewModel = koinViewModel(
-        parameters = { parametersOf(name, type, image, id) }
-    )
+    vm: EditorItemViewModel = koinViewModel(parameters = { parametersOf(id) })
 ) {
 
     val state = vm.channelFlow.collectAsState(Event.None)

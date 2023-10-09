@@ -1,7 +1,6 @@
 package com.emm.betsy.screen.menu
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -19,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -30,12 +28,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.listSaver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,7 +55,7 @@ fun ItemList(navigationController: NavHostController, vm: ItemListViewModel = ko
         popBackStack = { navigationController.popBackStack() },
         navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) },
         navigateToUpdateItem = {
-            navigationController.navigate(NavigationRoutes.UpdateItem.buildRoute(it.name, it.type, it.itemId, it.imageUri))
+            navigationController.navigate(NavigationRoutes.UpdateItem.buildRoute(it.itemId))
         }
     )
 

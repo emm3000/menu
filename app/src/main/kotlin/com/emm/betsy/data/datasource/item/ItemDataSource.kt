@@ -28,6 +28,10 @@ class ItemDataSource(db: EmmDatabase) {
         return itemQueries.getAllItems().asFlow().mapToList(Dispatchers.IO)
     }
 
+    fun getItemById(id: Long): Flow<List<Item>> {
+        return itemQueries.getItemById(id).asFlow().mapToList(Dispatchers.IO)
+    }
+
     fun fetchMenus(): Flow<List<Menu>> {
         return menuQueries.getAllMenus().asFlow().mapToList(Dispatchers.IO)
     }

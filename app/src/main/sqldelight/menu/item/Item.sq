@@ -17,6 +17,11 @@ SELECT *
 FROM Item
 ORDER BY createdAt DESC;
 
+getItemById:
+SELECT *
+FROM Item
+WHERE itemId = ?;
+
 getItemsByMenu:
 SELECT Item.*
 FROM Menu
