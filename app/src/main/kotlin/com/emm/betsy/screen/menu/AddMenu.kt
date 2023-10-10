@@ -4,14 +4,14 @@ package com.emm.betsy.screen.menu
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -39,14 +40,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import com.emm.betsy.NavigationRoutes
 import com.emm.betsy.ui.theme.BetsyTheme
 import menu.item.Item
 import org.koin.androidx.compose.koinViewModel
@@ -65,11 +70,11 @@ fun AddMenu(navigationController: NavHostController, vm: AddMenuViewModel = koin
         selectedList = vm.selectedItems,
         onSelectedItem = vm::addItem,
         removeItem = vm::removeItem,
-        createMenu = vm::createMenu
+        createMenu = vm::createMenu,
+        navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 private fun AddMenu(
     searchText: String = "",
@@ -80,12 +85,75 @@ private fun AddMenu(
     selectedList: List<Item> = emptyList(),
     onSelectedItem: (Item) -> Unit = {},
     removeItem: (Int) -> Unit = {},
-    createMenu: () -> Unit = {}
+    createMenu: () -> Unit = {},
+    navigateToAddItem: () -> Unit = {}
+) {
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        FirstSection(
+            modifier = Modifier
+                .weight(1f),
+            searchText = searchText,
+            onChangeSearchText = onChangeSearchText,
+            cleanSearchText = cleanSearchText,
+            selectedList = selectedList,
+            removeItem = removeItem,
+            entryList = entryList,
+            onSelectedItem = onSelectedItem,
+            secondList = secondList
+        )
+        Divider(Modifier.height(1.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+//                .border(
+//                    width = 1.dp,
+//                    color = Color.Gray,
+//                    shape = RectangleShape
+//                )
+                .padding(vertical = 5.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                onClick = createMenu, modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 10.dp)
+            ) {
+                Text(text = "Agregar menu")
+            }
+            Button(
+                onClick = navigateToAddItem, modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 10.dp)
+            ) {
+                Text(text = "Agregar plato")
+            }
+        }
+    }
+
+
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+private fun FirstSection(
+    modifier: Modifier,
+    searchText: String,
+    onChangeSearchText: (String) -> Unit,
+    cleanSearchText: () -> Unit,
+    selectedList: List<Item>,
+    removeItem: (Int) -> Unit,
+    entryList: List<Item>,
+    onSelectedItem: (Item) -> Unit,
+    secondList: List<Item>
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
     ) {
         OutlinedTextField(
             value = searchText,
@@ -104,13 +172,6 @@ private fun AddMenu(
                 }
             }
         )
-        Button(
-            onClick = createMenu, modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp)
-        ) {
-            Text(text = "Create Menu")
-        }
         FlowRow(
             modifier = Modifier,
             horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -121,8 +182,8 @@ private fun AddMenu(
                     onClick = { },
                     border = FilterChipDefaults.filterChipBorder(
                         borderColor = when (ItemType.toItemType(it.type)) {
-                            ItemType.ENTRY -> Color.Magenta
-                            ItemType.SECOND -> Color.Green
+                            ItemType.ENTRY -> Color.Magenta.copy(0.3f)
+                            ItemType.SECOND -> Color.Green.copy(0.3f)
                         }
                     ),
                     label = { Text(text = it.name) },
@@ -184,7 +245,6 @@ private fun AddMenu(
             }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -199,21 +259,38 @@ fun SimpleAnotherComponent(
             .height(75.dp),
         onClick = { onSelectedItem(item) },
         border = when (ItemType.toItemType(item.type)) {
-            ItemType.ENTRY -> BorderStroke(1.dp, Color.Magenta)
-            ItemType.SECOND -> BorderStroke(1.dp, Color.Green)
+            ItemType.ENTRY -> BorderStroke(1.dp, Color.Magenta.copy(.4f))
+            ItemType.SECOND -> BorderStroke(1.dp, Color.Green.copy(.4f))
         },
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
         ) {
-            Text(
-                text = item.name,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 3
+            AsyncImage(
+                model = item.imageUri,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
             )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color.Black.copy(0.5f))
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp)
+            ) {
+                Text(
+                    text = item.name,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 3
+                )
+            }
         }
+
 
     }
 }

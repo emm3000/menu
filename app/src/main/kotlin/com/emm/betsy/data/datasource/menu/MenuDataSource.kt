@@ -6,6 +6,8 @@ import com.emm.betsy.EmmDatabase
 import com.emm.betsy.currentTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import menu.menu.Menu
 import menu.menu.MenuQueries
 import java.time.Instant
@@ -29,10 +31,10 @@ class MenuDataSource(
             .mapToList(Dispatchers.IO)
     }
 
-    fun insert(
+    suspend fun insert(
         date: Long,
         description: String
-    ) {
+    ) = withContext(Dispatchers.IO) {
         try {
             menuQueries.insertMenu(
                 menuId = null,

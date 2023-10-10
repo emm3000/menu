@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -58,10 +58,11 @@ import kotlin.random.Random
 @Composable
 fun ItemList(navigationController: NavHostController, vm: ItemListViewModel = koinViewModel()) {
 
-    val itemList: List<Item> by vm.allItems.collectAsState()
+    val itemList: Pair<List<Item>, List<Item>> by vm.allItems.collectAsState()
 
     ItemList(
-        itemList = itemList,
+        itemListEntry = itemList.first,
+        itemListSecond = itemList.second,
         deleteItem = vm::deleteItem,
         popBackStack = { navigationController.popBackStack() },
         navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) },
@@ -74,17 +75,17 @@ fun ItemList(navigationController: NavHostController, vm: ItemListViewModel = ko
 
 @Composable
 private fun ItemList(
-    itemList: List<Item> = emptyList(),
+    itemListEntry: List<Item> = emptyList(),
+    itemListSecond: List<Item> = emptyList(),
     deleteItem: (Long) -> Unit = {},
     popBackStack: () -> Unit = {},
     navigateToAddItem: () -> Unit = {},
     navigateToUpdateItem: (Item) -> Unit = {}
 ) {
 
-
     BaseScaffold(
         popBackStack = popBackStack,
-        title = "Add item",
+        title = "Lista de platos",
         floatingActionButton = {
             FloatingActionButton(onClick = navigateToAddItem) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
@@ -100,15 +101,38 @@ private fun ItemList(
             verticalArrangement = Arrangement.spacedBy(5.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            if (itemList.isEmpty()) {
+            if (itemListEntry.isEmpty() && itemListSecond.isEmpty()) {
                 item {
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(text = "Sin items", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
                 }
             }
-            items(itemList, key = {
-                it.itemId
-            }) { item ->
+
+            item(span = { GridItemSpan(2) }) {
+                Text(
+                    text = "Entradas o caldos", modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp)
+                )
+            }
+
+            items(itemListEntry, key = { it.itemId }) { item ->
+                AnotherComponent(
+                    item = item,
+                    deleteItem = deleteItem,
+                    updateItem = navigateToUpdateItem
+                )
+            }
+
+            item(span = { GridItemSpan(2) }) {
+                Text(
+                    text = "Segundos", modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp)
+                )
+            }
+
+            items(itemListSecond, key = { it.itemId }) { item ->
                 AnotherComponent(
                     item = item,
                     deleteItem = deleteItem,
@@ -242,7 +266,8 @@ fun ItemListPreview() {
                 )
             }
             ItemList(
-                itemList = generateItems
+                itemListEntry = generateItems,
+                itemListSecond = generateItems
             )
         }
     }

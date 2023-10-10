@@ -67,7 +67,9 @@ fun ItemEditor(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { inputUri ->
+//            val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             context.grantUriPermission(context.packageName, inputUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//            context.contentResolver.takePersistableUriPermission(inputUri!!, takeFlags)
             updateImageUri(inputUri.toString())
         }
     )

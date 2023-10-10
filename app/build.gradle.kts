@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("app.cash.sqldelight") version "2.0.0"
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -83,6 +84,11 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:3.5.0")
     implementation("io.insert-koin:koin-android:3.5.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
+    implementation("com.google.firebase:firebase-messaging-ktx")
 }
 
 sqldelight {

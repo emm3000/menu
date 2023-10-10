@@ -4,7 +4,6 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.emm.betsy.EmmDatabase
 import com.emm.betsy.currentTime
-import com.emm.betsy.data.entities.MenuEntity
 import com.emm.betsy.data.entities.MenuItemEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -32,20 +31,12 @@ class ItemDataSource(db: EmmDatabase) {
         return itemQueries.getItemById(id).asFlow().mapToList(Dispatchers.IO)
     }
 
-    fun fetchMenus(): Flow<List<Menu>> {
-        return menuQueries.getAllMenus().asFlow().mapToList(Dispatchers.IO)
-    }
-
     fun fetchMenusAndItem(): Flow<List<menu.menuItem.MenuItem>> {
         return menuItemQueries.getAllMenuItems().asFlow().mapToList(Dispatchers.IO)
     }
 
     fun getItemsByMenu(menuId: Long = 1): Flow<List<Item>> {
         return itemQueries.getItemsByMenu(menuId).asFlow().mapToList(Dispatchers.IO)
-    }
-
-    fun getLastMenuInserted(): Flow<List<Menu>> {
-        return menuQueries.getLastMenu().asFlow().mapToList(Dispatchers.IO)
     }
 
     fun getItemsByName(name: String): Flow<List<Item>> {
@@ -98,20 +89,6 @@ class ItemDataSource(db: EmmDatabase) {
         }
     }
 
-    suspend fun insert(menuEntity: MenuEntity) = withContext(Dispatchers.IO) {
-        try {
-            menuQueries.insertMenu(
-                menuId = menuEntity.menuId,
-                date = menuEntity.date,
-                description = menuEntity.description,
-                createdAt = menuEntity.createdAt,
-                updatedAt = menuEntity.updatedAt
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
     suspend fun insert(menuItemEntity: MenuItemEntity): Unit = withContext(Dispatchers.IO) {
         try {
             menuItemQueries.insertMenuItem(
@@ -133,8 +110,8 @@ class ItemDataSource(db: EmmDatabase) {
             menuQueries.insertMenu(
                 date = Instant.now().toEpochMilli(),
                 description = UUID.randomUUID().toString(),
-                createdAt = Instant.now().toEpochMilli(),
-                updatedAt = Instant.now().toEpochMilli(),
+                createdAt = currentTime(),
+                updatedAt = currentTime(),
                 menuId = 1
             )
             val lastMenu: Menu = menuQueries.getLastMenu()
@@ -147,8 +124,8 @@ class ItemDataSource(db: EmmDatabase) {
                 menuItemQueries.insertMenuItem(
                     menuId = lastMenu.menuId,
                     itemId = it.itemId,
-                    createdAt = Instant.now().toEpochMilli(),
-                    updatedAt = Instant.now().toEpochMilli()
+                    createdAt = currentTime(),
+                    updatedAt = currentTime()
                 )
             }
 
