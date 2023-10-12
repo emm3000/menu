@@ -21,7 +21,10 @@ class MenuRepository(
             description = UUID.randomUUID().toString()
         )
 
-        val lastMenus: Menu = menuDataSource.fetchLatestMenu().firstOrNull()?.lastOrNull() ?: return
+        val lastMenus: Menu = menuDataSource
+            .fetchLatestMenu()
+            .firstOrNull()
+            ?.lastOrNull() ?: return
 
         listOfItem.forEach {
             menuItemDataSource.insert(

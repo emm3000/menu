@@ -32,7 +32,8 @@ fun Home(
     Home(
         navigateToAddItem = { navigationController.navigate(NavigationRoutes.ItemList.route) },
         navigateToAddMenu = { navigationController.navigate(NavigationRoutes.AddMenu.route) },
-        navigateToCurrentMenu = { navigationController.navigate(NavigationRoutes.Menu.route) }
+        navigateToCurrentMenu = { navigationController.navigate(NavigationRoutes.Menu.route) },
+        navigateToOrders = { navigationController.navigate(NavigationRoutes.Orders.route) },
     )
 }
 
@@ -42,7 +43,8 @@ fun Home(
 private fun Home(
     navigateToCurrentMenu: () -> Unit = {},
     navigateToAddItem: () -> Unit = {},
-    navigateToAddMenu: () -> Unit = {}
+    navigateToAddMenu: () -> Unit = {},
+    navigateToOrders: () -> Unit = {},
 ) {
 
     Scaffold(
@@ -82,6 +84,15 @@ private fun Home(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Add Menu")
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            FilledTonalButton(
+                onClick = navigateToOrders,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Pedidos")
             }
 
         }

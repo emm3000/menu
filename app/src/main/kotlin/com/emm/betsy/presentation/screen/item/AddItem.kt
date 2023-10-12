@@ -1,4 +1,4 @@
-package com.emm.betsy.presentation.screen.additem
+package com.emm.betsy.presentation.screen.item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.emm.betsy.presentation.screen.additem.common.ItemEditor
+import com.emm.betsy.presentation.screen.item.common.ItemEditor
 import com.emm.betsy.presentation.screen.menu.ItemType
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf

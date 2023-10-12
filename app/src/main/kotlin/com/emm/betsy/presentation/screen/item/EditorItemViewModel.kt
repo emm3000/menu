@@ -1,4 +1,4 @@
-package com.emm.betsy.presentation.screen.additem
+package com.emm.betsy.presentation.screen.item
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

@@ -21,11 +21,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.emm.betsy.presentation.screen.home.Home
-import com.emm.betsy.presentation.screen.additem.AddItem
-import com.emm.betsy.presentation.screen.additem.UpdateItem
+import com.emm.betsy.presentation.screen.item.AddItem
+import com.emm.betsy.presentation.screen.item.UpdateItem
 import com.emm.betsy.presentation.screen.menu.ItemList
 import com.emm.betsy.presentation.screen.menu.AddMenu
 import com.emm.betsy.presentation.screen.menu.Menu
+import com.emm.betsy.presentation.screen.orders.Orders
 import com.emm.betsy.presentation.ui.theme.BetsyTheme
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
@@ -114,6 +115,9 @@ fun Main() {
         }
         composable(NavigationRoutes.AddItem.route) {
             AddItem(navigationController)
+        }
+        composable(NavigationRoutes.Orders.route) {
+            Orders(navigationController)
         }
         composable(
             route = NavigationRoutes.UpdateItem.route,

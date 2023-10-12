@@ -1,10 +1,10 @@
-package com.emm.betsy.presentation.screen.additem
+package com.emm.betsy.presentation.screen.item
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
-import com.emm.betsy.presentation.screen.additem.common.ItemEditor
+import com.emm.betsy.presentation.screen.item.common.ItemEditor
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 

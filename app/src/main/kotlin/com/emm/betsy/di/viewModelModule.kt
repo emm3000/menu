@@ -1,7 +1,7 @@
 package com.emm.betsy.di
 
 import com.emm.betsy.presentation.screen.home.HomeViewModel
-import com.emm.betsy.presentation.screen.additem.EditorItemViewModel
+import com.emm.betsy.presentation.screen.item.EditorItemViewModel
 import com.emm.betsy.presentation.screen.menu.AddMenuViewModel
 import com.emm.betsy.presentation.screen.menu.ItemListViewModel
 import com.emm.betsy.presentation.screen.menu.MenuViewModel
