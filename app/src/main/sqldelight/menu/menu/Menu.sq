@@ -1,7 +1,7 @@
 CREATE TABLE Menu (
     menuId INTEGER NOT NULL PRIMARY KEY,
-    date INTEGER NOT NULL,
-    description TEXT NOT NULL,
+    date INTEGER NOT NULL UNIQUE,
+    description TEXT NOT NULL UNIQUE,
     createdAt INTEGER NOT NULL,
     updatedAt INTEGER NOT NULL
 );

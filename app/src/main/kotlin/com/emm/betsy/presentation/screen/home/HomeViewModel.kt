@@ -10,18 +10,7 @@ import com.github.javafaker.Faker
 class HomeViewModel(
     private val personDataSource: PersonDataSource,
     private val menuDataSource: ItemDataSource,
-    private val faker: Faker
 ) : ViewModel() {
 
-    companion object {
-        @Suppress("UNCHECKED_CAST")
-        fun provideInstance(personDataSource: PersonDataSource, itemLocalDataSource: ItemLocalDataSource): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return HomeViewModel(personDataSource, itemLocalDataSource, Faker.instance()) as T
-                }
-            }
-        }
-    }
 
 }
