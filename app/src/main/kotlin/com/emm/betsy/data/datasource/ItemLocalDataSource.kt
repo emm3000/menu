@@ -45,6 +45,7 @@ class ItemLocalDataSource(
                 imageUri = imageUri,
                 itemId = id
             )
+            Unit
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -53,6 +54,7 @@ class ItemLocalDataSource(
     override suspend fun deleteItem(itemId: Long) = withContext(Dispatchers.IO) {
         try {
             itemQueries.deleteItem(itemId = itemId)
+            Unit
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -5,8 +5,8 @@ import com.emm.betsy.presentation.screen.item.EditorItemViewModel
 import com.emm.betsy.presentation.screen.menu.AddMenuViewModel
 import com.emm.betsy.presentation.screen.menu.ItemListViewModel
 import com.emm.betsy.presentation.screen.menu.MenuViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.parameter.ParametersHolder
 import org.koin.dsl.module
 

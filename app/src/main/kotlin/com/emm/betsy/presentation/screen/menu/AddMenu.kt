@@ -107,10 +107,11 @@ private fun AddMenu(
             val initialIndex: Int = remember(Unit) {
                 menuList.indexOfFirst { it.description == LocalDate.now().toString() }
             }
-            val pagerState = rememberPagerState((Int.MAX_VALUE / 2) + initialIndex)
+            val pagerState = rememberPagerState(pageCount = { (Int.MAX_VALUE / 2) + initialIndex })
 
             HorizontalPager(
-                state = pagerState, pageCount = Int.MAX_VALUE, modifier = Modifier
+                state = pagerState,
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
             ) {
@@ -212,10 +213,12 @@ private fun FirstSection(
                     selected = false,
                     onClick = { },
                     border = FilterChipDefaults.filterChipBorder(
+                        enabled = true,
+                        selected = true,
                         borderColor = when (ItemType.toItemType(it.type)) {
                             ItemType.ENTRY -> Color.Magenta.copy(0.3f)
                             ItemType.SECOND -> Color.Green.copy(0.3f)
-                        }
+                        },
                     ),
                     label = { Text(text = it.name) },
                     trailingIcon = {

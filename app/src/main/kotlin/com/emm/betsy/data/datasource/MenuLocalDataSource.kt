@@ -38,6 +38,7 @@ class MenuLocalDataSource(
                 createdAt = currentTime(),
                 updatedAt = currentTime()
             )
+            Unit
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -23,6 +23,7 @@ class MenuItemLocalDataSource(
                 createdAt = createdAt,
                 updatedAt = updatedAt
             )
+            Unit
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -31,6 +32,7 @@ class MenuItemLocalDataSource(
     override suspend fun deleteMenu(menuId: Long) = withContext(Dispatchers.IO) {
         try {
             menuItemQueries.deleteMenu(menuId = menuId)
+            Unit
         } catch (e: Exception) {
             e.printStackTrace()
         }
