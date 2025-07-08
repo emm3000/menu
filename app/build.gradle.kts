@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.emm.betsy"
+    namespace = "com.emm.emm"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.emm.betsy"
+        applicationId = "com.emm.emm"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -90,7 +90,7 @@ dependencies {
 sqldelight {
     databases {
         create(name = "EmmDatabase") {
-            packageName.set("com.emm.betsy")
+            packageName.set("com.emm.emm")
         }
     }
 }
