@@ -50,7 +50,7 @@ import coil.compose.AsyncImage
 import com.emm.emm.data.entities.ItemEntity
 import com.emm.emm.presentation.NavigationRoutes
 import com.emm.emm.presentation.components.BaseScaffold
-import com.emm.emm.presentation.ui.theme.BetsyTheme
+import com.emm.emm.presentation.ui.theme.EmmTheme
 import kotlinx.coroutines.delay
 import menu.item.Item
 import org.koin.androidx.compose.koinViewModel
@@ -254,7 +254,7 @@ fun AnotherComponent(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun ItemListPreview() {
-    BetsyTheme(darkTheme = true) {
+    EmmTheme(darkTheme = true) {
         Surface {
             val generateItems = List(5) {
                 ItemEntity(

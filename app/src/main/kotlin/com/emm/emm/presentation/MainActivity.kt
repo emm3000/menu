@@ -27,7 +27,7 @@ import com.emm.emm.presentation.screen.menu.ItemList
 import com.emm.emm.presentation.screen.menu.AddMenu
 import com.emm.emm.presentation.screen.menu.Menu
 import com.emm.emm.presentation.screen.orders.Orders
-import com.emm.emm.presentation.ui.theme.BetsyTheme
+import com.emm.emm.presentation.ui.theme.EmmTheme
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 onDispose { }
             })
 
-            BetsyTheme {
+            EmmTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Main()

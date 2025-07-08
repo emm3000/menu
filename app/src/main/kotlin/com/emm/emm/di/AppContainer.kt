@@ -21,7 +21,7 @@ class DefaultAppContainer(private val appContext: Context) : AppContainer {
         AndroidSqliteDriver(
             schema = EmmDatabase.Schema,
             context = appContext,
-            name = "betsy.db",
+            name = "emm.db",
             callback = object : AndroidSqliteDriver.Callback(EmmDatabase.Schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     db.setForeignKeyConstraintsEnabled(true)

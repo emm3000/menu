@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.emm.emm.presentation.screen.item.RadioButtonTaskType
 import com.emm.emm.presentation.screen.menu.ItemType
-import com.emm.emm.presentation.ui.theme.BetsyTheme
+import com.emm.emm.presentation.ui.theme.EmmTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -165,7 +165,7 @@ fun ItemEditor(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun AddItemPreview() {
-    BetsyTheme(darkTheme = true) {
+    EmmTheme(darkTheme = true) {
         Surface {
             ItemEditor()
         }

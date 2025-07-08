@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.emm.emm.data.entities.ItemEntity
-import com.emm.emm.presentation.ui.theme.BetsyTheme
+import com.emm.emm.presentation.ui.theme.EmmTheme
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -184,7 +184,7 @@ private fun CurrentMenuDay(it: ItemEntity) {
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun MenuPreview() {
-    BetsyTheme(darkTheme = true) {
+    EmmTheme(darkTheme = true) {
         Surface {
             Menu()
         }

@@ -57,7 +57,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.emm.emm.data.entities.ItemEntity
 import com.emm.emm.presentation.NavigationRoutes
-import com.emm.emm.presentation.ui.theme.BetsyTheme
+import com.emm.emm.presentation.ui.theme.EmmTheme
 import menu.menu.Menu
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
@@ -332,7 +332,7 @@ fun SimpleAnotherComponent(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun AddMenuPreview() {
-    BetsyTheme(darkTheme = true) {
+    EmmTheme(darkTheme = true) {
         Surface {
             AddMenu()
         }

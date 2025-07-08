@@ -82,7 +82,7 @@ private val DarkColors = darkColorScheme(
 )
 
 @Composable
-fun BetsyTheme(
+fun EmmTheme(
     darkTheme: Boolean = true,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,

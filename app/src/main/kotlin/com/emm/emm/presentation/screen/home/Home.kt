@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.emm.emm.presentation.NavigationRoutes
-import com.emm.emm.presentation.ui.theme.BetsyTheme
+import com.emm.emm.presentation.ui.theme.EmmTheme
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,7 +105,7 @@ private fun Home(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun HomePreview() {
-    BetsyTheme(darkTheme = true) {
+    EmmTheme(darkTheme = true) {
         Surface {
             Home()
         }
