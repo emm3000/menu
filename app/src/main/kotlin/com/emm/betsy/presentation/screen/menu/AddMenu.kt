@@ -4,6 +4,7 @@ package com.emm.betsy.presentation.screen.menu
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -40,6 +43,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,12 +58,15 @@ import coil.compose.AsyncImage
 import com.emm.betsy.data.entities.ItemEntity
 import com.emm.betsy.presentation.NavigationRoutes
 import com.emm.betsy.presentation.ui.theme.BetsyTheme
+import menu.menu.Menu
 import org.koin.androidx.compose.koinViewModel
+import java.time.LocalDate
 
 @Composable
 fun AddMenu(navigationController: NavHostController, vm: AddMenuViewModel = koinViewModel()) {
 
     val list: Pair<List<ItemEntity>, List<ItemEntity>> by vm.pairList.collectAsState()
+    val menu: List<Menu> by vm.menu.collectAsState()
 
     AddMenu(
         searchText = vm.searchText,
@@ -71,10 +78,12 @@ fun AddMenu(navigationController: NavHostController, vm: AddMenuViewModel = koin
         onSelectedItem = vm::addItem,
         removeItem = vm::removeItem,
         createMenu = vm::createMenu,
-        navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) }
+        navigateToAddItem = { navigationController.navigate(NavigationRoutes.AddItem.route) },
+        menuList = menu
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AddMenu(
     searchText: String = "",
@@ -86,12 +95,34 @@ private fun AddMenu(
     onSelectedItem: (ItemEntity) -> Unit = {},
     removeItem: (Int) -> Unit = {},
     createMenu: () -> Unit = {},
-    navigateToAddItem: () -> Unit = {}
+    navigateToAddItem: () -> Unit = {},
+    menuList: List<Menu> = emptyList()
 ) {
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+
+        if (menuList.isNotEmpty()) {
+            val initialIndex: Int = remember(Unit) {
+                menuList.indexOfFirst { it.description == LocalDate.now().toString() }
+            }
+            val pagerState = rememberPagerState((Int.MAX_VALUE / 2) + initialIndex)
+
+            HorizontalPager(
+                state = pagerState, pageCount = Int.MAX_VALUE, modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            ) {
+                val index = it % menuList.size
+
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(text = menuList[index].description)
+                    Text(text = "Como es la nuez csm yhaa")
+                }
+
+            }
+        }
         FirstSection(
             modifier = Modifier
                 .weight(1f),

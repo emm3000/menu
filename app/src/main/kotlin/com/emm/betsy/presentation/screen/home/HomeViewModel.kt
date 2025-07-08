@@ -1,16 +1,19 @@
 package com.emm.betsy.presentation.screen.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.emm.betsy.data.datasource.ItemDataSource
-import com.emm.betsy.data.datasource.ItemLocalDataSource
-import com.emm.betsy.data.datasource.PersonDataSource
-import com.github.javafaker.Faker
+import androidx.lifecycle.viewModelScope
+import com.emm.betsy.data.repository.MenuRepository
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val personDataSource: PersonDataSource,
-    private val menuDataSource: ItemDataSource,
+    private val menuRepository: MenuRepository
 ) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            menuRepository.createMenuByDate()
+        }
+    }
 
 
 }

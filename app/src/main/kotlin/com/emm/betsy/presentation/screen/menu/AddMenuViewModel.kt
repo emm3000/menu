@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emm.betsy.data.datasource.ItemLocalDataSource
 import com.emm.betsy.data.entities.ItemEntity
 import com.emm.betsy.data.repository.ItemRepository
 import com.emm.betsy.data.repository.MenuRepository
@@ -19,7 +18,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import menu.item.Item
+import menu.menu.Menu
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddMenuViewModel(
@@ -31,6 +30,13 @@ class AddMenuViewModel(
         private set
 
     val selectedItems = mutableStateListOf<ItemEntity>()
+
+    val menu: StateFlow<List<Menu>> = menuRepository.fetchAllMenus()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     // first value -> entry  ----- second value -> seconds
     val pairList: StateFlow<Pair<List<ItemEntity>, List<ItemEntity>>> = snapshotFlow { searchText }

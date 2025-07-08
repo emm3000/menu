@@ -4,6 +4,7 @@ import com.emm.betsy.data.datasource.MenuDataSource
 import com.emm.betsy.data.datasource.MenuItemDataSource
 import com.emm.betsy.data.entities.ItemEntity
 import com.emm.betsy.presentation.currentTime
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import menu.menu.Menu
 import java.time.LocalDate
@@ -37,6 +38,10 @@ class MenuRepository(
             )
         }
 
+    }
+
+    fun fetchAllMenus(): Flow<List<Menu>> {
+        return menuDataSource.fetchAllMenus()
     }
 
     private fun closeToStartDate(date: LocalDate): Boolean {
