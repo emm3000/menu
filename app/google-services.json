@@ -26,25 +26,6 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:686327472880:android:8867460331838915eb9835",
-        "android_client_info": {
-          "package_name": "com.emm.betsy"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDWVImud7Z_ZCdqNUGJx1r08XrZmKzfF28"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:686327472880:android:a4a4446dabc82666eb9835",
         "android_client_info": {
           "package_name": "com.emm.emm"
